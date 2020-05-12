@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>
+    即开彩票兑奖系统
+  </title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" href="/layui.css" media="all">
+  <Link rel="Shortcut Icon" href="/favicon.ico" />
+  <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+  <style>
+    .red {
+      color: red
+    }
+
+    .blue {
+      color: blue
+    }
+
+    .green {
+      color: green
+    }
+  </style>
+</head>
+
+<body>
+  <h2>
+    终端列表&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="javascript:void(0)" onclick="reloadTable(terminalTable)"
+    class="layui-btn  layui-btn-sm layui-btn-normal">強制刷新</a>
+  </h2>
+  <table class="layui-hide" id="terminal">
+  </table>
+  <h2>
+    待兑奖
+  </h2>
+  <table class="layui-hide" id="waitingTicket">
+  </table>
+
+  <h2>
+    奖票表 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="javascript:void(0)" onclick="addAwardTicketAll()"
+      class="layui-btn  layui-btn-sm ">重新兑奖</a>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="javascript:void(0)" onclick="reloadTable(winTicketTable)"
+      class="layui-btn  layui-btn-sm layui-btn-normal">強制刷新</a>
+  </h2>
+  <table class="layui-hide" id="winTicket">
+  </table>
+  <script src="/layui.js" charset="utf-8">
+  </script>
+  <!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+  <script src="/index.min.js?v=2" charset="utf-8">
+  </script>
+</body>
+
+</html>
