@@ -1,4 +1,4 @@
-var getDataDelay = 3000, loadTerminalAwardStatusDelay = 2000, loadWaitingTicketDelay = 3000;
+
 var terminalTable, winTicketTable, waitingTicketTable, workList = [],
     workListEl = {},
     waitingTicketList = {},
