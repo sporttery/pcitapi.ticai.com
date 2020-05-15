@@ -29,10 +29,10 @@
 
 <body>
   <h2>
-    终端列表&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="javascript:void(0)" onclick="reloadTable(terminalTable)"
-    class="layui-btn  layui-btn-sm layui-btn-normal">強制刷新</a>
+    终端列表&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="javascript:void(0)" onclick="workListEl=false;all_terminal=[];"
+      class="layui-btn  layui-btn-sm layui-btn-normal">強制刷新</a>
   </h2>
-  <table class="layui-hide" id="terminal">
+  <table class="layui-hide" id="terminal"  lay-filter="terminal">
   </table>
   <h2>
     待兑奖
@@ -42,16 +42,24 @@
 
   <h2>
     奖票表 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="javascript:void(0)" onclick="addAwardTicketAll()"
-      class="layui-btn  layui-btn-sm ">重新兑奖</a>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="javascript:void(0)" onclick="reloadTable(winTicketTable)"
-      class="layui-btn  layui-btn-sm layui-btn-normal">強制刷新</a>
+      class="layui-btn  layui-btn-sm ">重新兑奖</a>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="javascript:void(0)"
+      onclick="winTicketTable && winTicketTable.reload()" class="layui-btn  layui-btn-sm layui-btn-normal">強制刷新</a>
   </h2>
-  <table class="layui-hide" id="winTicket">
+  <table class="layui-hide" id="winTicket"  lay-filter="winTicket">
   </table>
   <script src="/layui.js" charset="utf-8">
   </script>
-  <script>var getDataDelay = 3000, loadTerminalAwardStatusDelay = 2000, loadWaitingTicketDelay = 3000;</script>
+  <script>
+    
+    var getWorkStatusDelay = 500;
+    var getWaitingTicketDelay = 3000;
+  </script>
   <!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
-  <script src="/index.min.js?v=2" charset="utf-8">
+  <script type="text/html" id="checkboxWorkStatus">
+    <!-- 这里的 checked 的状态只是演示 -->
+    <input type="checkbox" name="checkboxWorkStatus" value="{{d.terminal_no}}" title="开关" lay-filter="checkboxWorkStatus" {{ d.work_status == 'START' ? 'checked' : '' }}>
+  </script>
+  <script src="/index.js?v=2" charset="utf-8">
   </script>
 </body>
 

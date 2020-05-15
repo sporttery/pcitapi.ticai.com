@@ -35,7 +35,9 @@ if not action then
 else 
 	value = args.value or ""
 end
-
+if not key then
+	key="foo"
+end
 ngx.say(package.path.."</br>");
 ngx.say(package.cpath.."</br>");
 

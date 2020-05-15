@@ -15,7 +15,13 @@ done
 while true; do
     for v in $ONLINE_LIST; do
         if [ "$(redis-cli get WORK_STATUS_$v)" = "START" ]; then #如果已经开启
-            echo "${v} 处理开启状态"
+            echo "${v} 处于开启状态"
+            award_result="$(redis-cli GET AWARD_RESULT_${v})"
+            while [ -n "${award_result}" ] ;do
+                echo ${v}"上次兑奖结果还在："${award_result}",等待结果取走后再继续"
+                sleep 1
+                award_result="$(redis-cli GET AWARD_RESULT_${v})"
+            done
             sleep 2
             award_no=$(redis-cli lpop AWARD_NO_$v)
             if [ -n "$award_no" ] ; then #如果拿到奖票

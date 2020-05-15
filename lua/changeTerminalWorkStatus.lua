@@ -1,17 +1,37 @@
 local terminal_no = ngx.var.arg_terminal_no;
-local rtn_data={}
+local work_status = ngx.var.arg_work_status;
+
+local redis_factory = require('redis_factory')(config.redis) -- import config when construct
+local ok, redis = redis_factory:spawn('redis')
+
+local rtn_data = {}
 if terminal_no then
-    local status = getWorkStatus(terminal_no)
-    if status == "START" then
-        status="STOP"
-    else
-        status="START"
+    if not __terminal_config then
+        __terminal_config = loadTerminalConfig(ngx.var.document_root .. "/config.json")
     end
-    rtn_data.msg=setWorkStatus(terminal_no,status)
-    rtn_data.code=0
+    local status = redis:get("ONLINE_" .. terminal_no)
+    if type(status) == "userdata" or status ~= "ONLINE" then
+        rtn_data.code = -2
+        rtn_data.msg = "终端机并没上线"
+    else
+        if work_status == "START" then
+            work_status = "STOP"
+        else
+            work_status = "START"
+        end
+        msg = redis:set("WORK_STATUS_" .. terminal_no, work_status)
+        if msg == "OK" then
+            if __terminal_config[terminal_no] then
+                __terminal_config[terminal_no].work_status = work_status
+            end
+            rtn_data.msg = work_status .. " 操作成功"
+            rtn_data.code = 0
+        end
+    end
+    redis_factory:destruct()
 else
-    rtn_data.code=-1
-    rtn_data.msg="参数异常"
+    rtn_data.code = -1
+    rtn_data.msg = "参数异常"
 end
 
 ngx.say(cjson.encode(rtn_data))

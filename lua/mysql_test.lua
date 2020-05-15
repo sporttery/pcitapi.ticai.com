@@ -23,6 +23,9 @@ local props = {
    password = "123456",
    database = "gugule"
 }
+local config = require ("config_constant")
+
+props = config.db
   
 local res, err, errno, sqlstate = db:connect(props)  
   

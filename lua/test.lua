@@ -40,5 +40,23 @@ local sql = "update Tb_Win_Ticket set msg='" .. award_result_info ..
 
 print(sql);
 
+cjson = require("cjson")
+mysql = require("luasql.mysql")
+redis = require("redis")
 
+config = {
+    redis = {host = '127.0.0.1', port = 6379},
 
+    db = {
+        -- host = "120.78.95.34",
+        -- port = 3306,
+        -- user = "gugule",
+        -- password = "%)BMlEj634*I2&Uj",
+        -- database = "gugule"
+        host = "127.0.0.1",
+        port = 3306,
+        user = "root",
+        password = "123456",
+        database = "gugule"
+    }
+}

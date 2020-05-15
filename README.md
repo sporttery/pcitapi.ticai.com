@@ -13,9 +13,9 @@
     redis_test.lua 测试 redis连接
     test.lua 测试逻辑脚本
     www.pcitapi.ticai.com.conf 配置脚本 ，include www.pcitapi.ticai.com.conf 放入nginx.conf中
-    timer.lua 定时任务，可通过 www.pcitapi.ticai.com.conf 开启或者关闭
     index.html 控制端界面
     index.js 控制端脚本
-    test.sh 模拟彩票机出票
+    award_scan_test_redis_v1.2 模拟彩票机出票
+    crontab.sh 定时任务脚本
     
 # 自动兑奖彩票机端 见 ticai 项目
