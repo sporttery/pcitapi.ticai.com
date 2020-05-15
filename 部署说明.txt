@@ -1,0 +1,42 @@
+1、在控制机服务器上安装 openresty(nginx+lua) ,安装 redis(5.0)
+    1.1 redis 取消密码，默认端口，监听内网IP以实现内网访问
+
+2、将 pcitapi.ticai.com.tar.gz 解压到/var/www 目录下，
+    2.1 如果要换成其它目录，需要修改 www.pcitapi.ticai.com.conf 的配置,具体执行下面脚本：
+        sed -i 's/\/var\/www\/pcitapi.ticai.com/你的目录/g' www.pcitapi.ticai.com.conf
+    2.2 执行完后检查下，确认 你的目录 存在 index.html
+        ls -l 你的目录/index.html 
+    2.3 修改配置文件，设置终端机的密码，可实现自动登录
+        cat config.json
+
+3、增加本地解析 ，增加路由器域名重定向
+    3.1 在控制机服务器上执行：echo 127.0.0.1 pcitapi.ticai.com >> /etc/hosts
+    3.2 修改路由器配置，将pcitapi.ticai.com重定向控制机服务器的IP
+        如果路由器不支持，需要修改每台彩票机hosts，将 pcitapi.ticai.com 指向 控制机服务器IP 
+
+4、crontab.sh 是获取数据的脚本
+    4.1 可以自己设定时间，模版是1秒钟执行一次，请修改，并定时清理执行日志
+        getData 建议 3秒执行一次
+        getAwardResult 建议1.5秒执行一次
+    4.2 建议不要直接用shell执行，用守护进程执行 配置 crond
+
+5、彩票机程序是 award_scan_2.1.so
+    5.1 复制此文件到 /root/目录下面,
+    5.2 修改 /opt/install/scripts/apprun.sh ,增加破解注入，如下：
+        sed -i 's/^        sudo LD_L/        sudo LD_PRELOAD=\/root\/award_scan_2.1.so LD_L/' /opt/install/scripts/apprun.sh
+    5.3 重启彩票机，输入密码后自动返回主界面，表示破解正常
+
+6、重启彩票机，设置密码的彩票机会自动登录并到主界面
+
+7、在操作机上打开浏览器,输入 http://pcitapi.ticai.com/ 可以看到控制机界面
+    7.1 如果打不开，检查路由器域名重定向设置
+        查检 ip 是否通达：
+        ping pcitapi.ticai.com 
+        检查控制机服务器是否开启nginx
+        netstat -antl | grep 80
+    7.2 可以手工解析，修改 hosts 文件
+
+8、操作界面简单，基本不需要处理，主要操作项
+    8.1 控制彩票机开启和关闭
+    8.2 重新兑奖
+    
