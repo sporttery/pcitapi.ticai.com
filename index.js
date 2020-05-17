@@ -2,7 +2,7 @@
 var terminalTable, winTicketTable, waitingTicketTable, table, form, $;
 var workListEl = {}, all_terminal = [], workList = [];
 var waitingTicketEl, winTicketEl;
-var getWorkStatusTimer, getWaitingTicketTimer;getAwardResultTimer;
+var getWorkStatusTimer, getWaitingTicketTimer, getAwardResultTimer, jinggaoAudio;
 var os = function () {
     var ua = navigator.userAgent,
         isWindowsPhone = /(?:Windows Phone)/.test(ua),
@@ -55,6 +55,26 @@ function getWorkStatus() {
                     } else {
                         text = "正在兑奖 <b style='color:red'>票号：" + award_status + "</b>";
                         color = "blue";
+                        //3秒后检查，是否这个票号还在，如果还在，那说明兑奖出了问题，因为一张票号，不可能3秒了还不兑奖
+                        setTimeout(function (opt) {
+                            award_status = opt.award_status;
+                            terminal_no = opt.terminal_no;
+                            var el;
+                            if (workListEl[terminal_no]) {
+                                el = workListEl[terminal_no];
+                            } else {
+                                el = $("#award_status_" + terminal_no);
+                            }
+                            if (el && el.data("value") == award_status) {
+                                if (!jinggaoAudio) {
+                                    $("body").append('<audio src="/jinggao.mp3" id="jinggaoAudio" autoplay="autoplay">您的浏览器不支持 audio 标签。</audio>');
+                                    jinggaoAudio = $("#jinggaoAudio");
+                                } else {
+                                    jinggaoAudio[0].play();
+                                }
+                                layer.msg("警告：<h2 style='color:yellow'>"+terminal_no+"</h2>有票3秒都没有完成兑奖<h3 style='color:pink'>"+award_status+"</h3>");
+                            }
+                        }, 3000, { award_status, terminal_no });
                         if (waitingTicketEl[award_status]) {
                             waitingTicketEl[award_status].toggleClass("red");
                         } else {
@@ -125,7 +145,7 @@ function getAwardResult(ticket, terminal_no) {
                 }
                 if (err) {
                     getAwardResultTimer && clearTimeout(getAwardResultTimer)
-                    getAwardResultTimer=setTimeout(function(){ winTicketTable.reload();},3000);
+                    getAwardResultTimer = setTimeout(function () { winTicketTable.reload(); }, 3000);
                 }
             }
         }
