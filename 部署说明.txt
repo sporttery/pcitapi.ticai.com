@@ -6,8 +6,11 @@
         sed -i 's/\/var\/www\/pcitapi.ticai.com/你的目录/g' www.pcitapi.ticai.com.conf
     2.2 执行完后检查下，确认 你的目录 存在 index.html
         ls -l 你的目录/index.html 
-    2.3 修改配置文件，设置终端机的密码，可实现自动登录
+    2.3 修改配置文件，设置终端机的密码，可实现自动登录,
         cat config.json
+        pwd1 是UKEY密码，8位数字
+        pwd2 是用户账户和密码的拼接，9位数字
+        autoStart 默认打开兑奖功能， on 是默认打开， 不设置或者其它值如off，就是不打开
 
 3、增加本地解析 ，增加路由器域名重定向
     3.1 在控制机服务器上执行：echo 127.0.0.1 pcitapi.ticai.com >> /etc/hosts
