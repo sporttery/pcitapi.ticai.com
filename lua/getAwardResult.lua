@@ -93,8 +93,13 @@ if not terminal_no then
 else
     table.insert(terminal_arr,terminal_no)
 end
-getAwardResult(terminal_arr)
+if #terminal_arr > 0 then
+    getAwardResult(terminal_arr)
+    redis_factory:destruct()
+else
+    rtn_data.code=-3;
+    rtn_data.msg = "没有开启的终端机，请先开启终端机。";
+end
 
-redis_factory:destruct()
 ngx.say(cjson.encode(rtn_data))
 
