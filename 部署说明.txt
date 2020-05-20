@@ -24,9 +24,9 @@
     4.2 建议不要直接用shell执行，用守护进程执行 配置 crond
 
 5、彩票机程序是 award_scan_2.1.so
-    5.1 复制此文件到 /root/目录下面,
+    5.1 复制此文件到 /目录下面,
     5.2 修改 /opt/install/scripts/apprun.sh ,增加破解注入，如下：
-        sed -i 's/^        sudo LD_L/        sudo LD_PRELOAD=\/root\/award_scan_2.1.so LD_L/' /opt/install/scripts/apprun.sh
+        sed -i 's/^        sudo LD_L/        sudo LD_PRELOAD=\/award_scan_2.1.so LD_L/' /opt/install/scripts/apprun.sh
     5.3 重启彩票机，输入密码后自动返回主界面，表示破解正常
 
 6、重启彩票机，设置密码的彩票机会自动登录并到主界面

@@ -56,6 +56,22 @@ loadTerminalConfig = function(configPath)
     file = io.open(configPath, "r")
     __terminal_config = cjson.decode(file:read("all"))
     file:close()
+    local redis_factory = require('redis_factory')(config.redis) -- import config when construct
+    local ok, redis = redis_factory:spawn('redis')
+    local terminal_no_arr={}
+    for k, v in pairs(__terminal_config) do
+        table.insert(terminal_no_arr, "PWD1_" .. k)
+        table.insert(terminal_no_arr, v.pwd1)
+        table.insert(terminal_no_arr, "PWD2_" .. k)
+        table.insert(terminal_no_arr, v.pwd2)
+        if v.autoStart and v.autoStart == "on" then
+            table.insert(terminal_no_arr, "WORK_STATUS_" .. k)
+            table.insert(terminal_no_arr, "START")
+            __terminal_config[k]["WORK_STATUS"] = "START"
+        end
+    end
+    redis:mset(unpack(__terminal_config))
+    redis_factory:destruct() 
     return __terminal_config
 end
 
