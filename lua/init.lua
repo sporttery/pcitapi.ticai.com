@@ -70,7 +70,7 @@ loadTerminalConfig = function(configPath)
             __terminal_config[k]["WORK_STATUS"] = "START"
         end
     end
-    redis:mset(unpack(__terminal_config))
+    redis:mset(unpack(terminal_no_arr))
     redis_factory:destruct() 
     return __terminal_config
 end
