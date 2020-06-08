@@ -2,9 +2,9 @@
 #chmod +x /etc/rc.d/rc.local
 #echo "nohup crontab.sh &" >> /etc/rc.d/rc.local
 logFile=/var/log/pcitapi.log
-datetime=$(date +"%F %T")
 while true
 do
+    datetime=$(date +"%F %T")
     data=$(curl -s -m 2 http://pcitapi.ticai.com/api/getData 2>&1)
     mcount=$(echo $data | wc -m)
     if [ $mcount -gt 76 ] ; then
