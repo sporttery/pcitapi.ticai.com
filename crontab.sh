@@ -14,6 +14,8 @@
 
 
 # nohup /var/www/pcitapi.ticai.com/crontab.sh &
+#chmod +x /etc/rc.d/rc.local
+#echo "nohup crontab.sh &" >> /etc/rc.d/rc.local
 logFile=/var/log/pcitapi.log
 datetime=$(date +"%F %T")
 echo "START AT $datetime" >> $logFile
@@ -30,6 +32,5 @@ do
     if [ $mcount -gt 60 ] ; then
         echo [$datetime] - $result >> $logFile
     fi
-    sleep 1
+    sleep 1.5
 done
-
