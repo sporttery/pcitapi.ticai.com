@@ -529,4 +529,28 @@ layui.use('table',
                 }
             });
         });
+
+        (function longPolling() {
+            $.ajax({
+                  url: "/sub?key=AWARD_RESULT",
+                  data: {"timed": new Date().getTime()},
+                  dataType: "text",
+                  timeout: 500000,
+                  error: function (XMLHttpRequest, textStatus, errorThrown) {
+                      console.log("[state: " + textStatus + ", error: " + errorThrown + " ]" + new Date());
+                      if (textStatus == "timeout") { // 请求超时
+                              longPolling(); // 递归调用
+                          // 其他错误，如网络错误等
+                          } else { 
+                              longPolling();
+                          }
+                      },
+                  success: function (data, textStatus) {
+                      console.log(data);
+                      if (textStatus == "success") { // 请求成功
+                          longPolling();
+                      }
+                  }
+              });
+          })();
     });

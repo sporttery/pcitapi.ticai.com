@@ -10,49 +10,13 @@ rtn_data.count = 0
 rtn_data.data = {}
 
 local function setAwardResult(award_result,terminal_no)
-    data = {}
+    local data = {}
     if award_result then
-        award_no = split(award_result, " ")[1];
-        award_result_arr = split(award_result, "|");
-        award_result_info = award_result_arr[#award_result_arr]
-        award_time = award_result_arr[3]
-        award_money = award_result_info:match("中奖金额：(%d+)元")
-        prize_flag = 1
-        if not award_money then
-            prize_flag = 4
-            award_money = -1
-        else
-            award_money = award_money .. "00"
-        end
-        sql = "update Tb_Win_Ticket set msg='" .. award_result_info ..
-                "', prize_flag=" .. prize_flag .. ",prize_value=" .. award_money ..
-                ",prize_timestamp='" .. award_time .. "',PRIZE_UNIT_ID='" .. terminal_no ..
-                "' where ticket_idmsg='" .. award_no .. "';"
-        -- count = mysqlUtil:query(sql, config.db).affected_rows
-        res,err = mysqlUtil:query(sql, config.db)
-        count = 0
-        
-        if res then
-            count = res.affected_rows
-        else
-            data.msg = err
-        end
-        data.dbres = res
-        data.dberr = err
-        data.award_no = award_no
-        data.info = award_result_info
-        data.prize_flag = prize_flag
-        data.prize_value = award_money
-        data.prize_timestamp = award_time
-        data.PRIZE_UNIT_ID = terminal_no
-        if count > 0 then
+        data = saveAwardResult(award_result,terminal_no)
+        if data.count > 0 then
             rtn_data.count = rtn_data.count  + 1
-            data.msg = "成功"
-            delRes = redis:del("AWARD_RESULT_" .. terminal_no)
-            data.delRes = delRes
         end
     else
-        data = {}
         data.msg = "成功"
         data.info="db"
         rtn_data.count = rtn_data.count  + 1
@@ -102,4 +66,3 @@ else
 end
 
 ngx.say(cjson.encode(rtn_data))
-

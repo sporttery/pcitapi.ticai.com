@@ -1,14 +1,15 @@
 local redis = require "resty.redis"
+-- local redis = require "redis"
 local cjson = require("cjson")  
--- 平台公共的配置文件常量
-local config = require ("config_constant")
 
-
+-- luarocks install luasql-mysql MYSQL_DIR=/usr/local/Cellar/mysql@5.7/5.7.29 MYSQL_INCDIR=/usr/local/Cellar/mysql@5.7/5.7.29/include/mysql
+-- luarocks install luasql-redis
+-- luarocks install redis-lua
 local red = redis:new()
 
 red:set_timeouts(10000, 10000, 10000) -- 1 sec
 
-local ok, err = red:connect(config.redis.host,config.redis.port)
+local ok, err = red:connect("127.0.0.1",6379)
 if not ok then
     ngx.say("1: failed to connect: ", err)
     return
