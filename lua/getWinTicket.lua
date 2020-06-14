@@ -11,15 +11,16 @@ end
 
 local mysqlUtil = require "mysql_factory"
 
-local whereStr = " where station_Id = 'test'"
+-- local whereStr = " where station_Id = 'test'"
+local whereStr = " where 1 = 1"
 
-local sql = "select count(*) as count from Tb_Win_Ticket " .. whereStr
+local sql = "select count(*) as count from Tb_Win_Ticket_V2 " .. whereStr
 
 
 local count = tonumber(mysqlUtil:query(sql, config.db)[1].count)
 -- ngx.log(ngx.ERR,"共有记录数：",count)
 sql =
-    "select  id,insert_Timestamp,msg,prize_Flag,prize_value,prize_Unit_Id,prize_Timestamp,station_Id,ticket_idmsg from Tb_Win_Ticket "
+    "select  id,insert_Timestamp,msg,prize_Flag,prize_value,prize_Unit_Id,prize_Timestamp,station_Id,ticket_idmsg from Tb_Win_Ticket_V2 "
 sql = sql .. whereStr .. orderBy .. limitStr
 
 -- ngx.say(sql)

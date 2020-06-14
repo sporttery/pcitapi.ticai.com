@@ -13,8 +13,8 @@ local redis_factory = require('redis_factory')(config.redis) -- import config wh
 local ok, redis = redis_factory:spawn('redis')
 local mysqlUtil = require "mysql_factory"
 
-local sql =
-    "select ticket_idmsg from Tb_Win_Ticket where prize_flag = 0 and station_Id = 'test' order by insert_Timestamp asc ,ticket_idmsg asc"
+-- local sql = "select ticket_idmsg from Tb_Win_Ticket_V2 where prize_flag = 0 and station_Id = 'test' order by insert_Timestamp asc ,ticket_idmsg asc"
+local sql = "select ticket_idmsg from Tb_Win_Ticket_V2 where prize_flag = 0 order by insert_Timestamp asc ,ticket_idmsg asc"
 local rtn_data={}
 rtn_data.code=0
 if online_list and type(online_list) ~= "userdata" and #online_list > 0 then
@@ -72,7 +72,7 @@ if online_list and type(online_list) ~= "userdata" and #online_list > 0 then
             table.insert(v, "失败"..res)
         end
     end
-    sql = "update Tb_Win_Ticket set prize_flag = -1 where ticket_idmsg in ('"..table.concat(success_arr,"','").."')"
+    sql = "update Tb_Win_Ticket_V2 set prize_flag = -1 where ticket_idmsg in ('"..table.concat(success_arr,"','").."')"
     count = mysqlUtil:query(sql, config.db).affected_rows
     rtn_data.successCount = count
     rtn_data.successData = success_arr
