@@ -34,6 +34,7 @@ for k, v in pairs(terminalList) do
     terminal.terminal_no = k
     terminal.pwd1 = v.pwd1
     terminal.pwd2 = v.pwd2
+    terminal.IP = v.IP or "--"
     if type(status_arr[idx]) == "userdata" then 
         status_arr[idx] = "STOP" 
     end

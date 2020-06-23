@@ -20,6 +20,7 @@ local ok, redis = redis_factory:spawn('redis')
 
 -- 获取前端传递的key
 local key = args.key
+local ele = args.ele
 local value
 local action = args.action
 if not action then
@@ -39,6 +40,18 @@ if action == "get" then
     local va = redis:get(key)
     -- 响应前端
     ngx.say('{"action":"get","key":"' .. key .. '","result":"' .. va .. '"}')
+elseif action == "hget" then
+    -- 在redis中获取key对应的值
+    local va = redis:hget(key,ele)
+    -- 响应前端
+    local data={}
+    data.result=va
+    data.key=key
+    data.ele=ele
+    data.action=action
+    data.args=args
+    ngx.say(cjson.encode(data))
+    ngx.exit(ngx.HTTP_OK)
 elseif action == "lrange" then
     local va = redis:lrange(key, 0, -1)
     if va then

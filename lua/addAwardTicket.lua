@@ -18,6 +18,7 @@ rtn_data.code = 0
 if terminal_no and ticket then
     local redis_factory = require('redis_factory')(config.redis) -- import config when construct
     local ok, redis = redis_factory:spawn('redis')
+    local mysqlUtil = require "mysql_factory"
     local ticket_arr = split(ticket, ",");
     local terminal_arr = split(terminal_no, ",");
     rtn_data.ticket_arr = ticket_arr
@@ -35,6 +36,8 @@ if terminal_no and ticket then
         end
     end
     rtn_data.terminal_no_arr = terminal_no_arr
+    local sql = "update Tb_Win_Ticket_V2 set prize_Timestamp = null,msg = null,prize_Flag = -1,prize_value = -1,prize_Unit_Id = null where ticket_idmsg in ('"..table.concat(ticket_arr,"','").."')"
+    local sqlres = mysqlUtil:query(sql, config.db)
 
     for k, v in pairs(terminal_no_arr) do
         local res = redis:rpush("AWARD_NO_" .. k, unpack(v))
@@ -42,6 +45,8 @@ if terminal_no and ticket then
     end
     rtn_data.msg = "OK"
     rtn_data.data = terminal_no_arr
+    rtn_data.sql = sql
+    rtn_data.sqlres = sqlres
     redis_factory:destruct()
 else
     rtn_data.msg = "参数错误"

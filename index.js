@@ -48,7 +48,7 @@ function getWorkStatus() {
                         } else {
                             getWaitingTicket(true);
                         }
-                        getAwardResult(oldAwardNo, terminal_no);
+                        //getAwardResult(oldAwardNo, terminal_no);
                         if (!winTicketEl[oldAwardNo]) {
                             winTicketTable.reload();
                         }
@@ -427,8 +427,17 @@ function initTermnal(data) {
             sort: true
         },
         {
+            field: 'IP',
+            width: "6%",
+            title: 'IP',
+            sort: true,
+            templet: function (d) {
+                return d.IP.split(".").slice(-2).join(".")
+            }
+        },
+        {
             field: 'pwd',
-            width: "10%",
+            width: "13%",
             title: '密码',
             align: 'center',
             templet: function (d) {
@@ -437,7 +446,7 @@ function initTermnal(data) {
         },
         {
             field: 'award_status',
-            width: os.isPc ? "65%" : "200",
+            width: os.isPc ? "56%" : "200",
             title: '兑奖状态',
             templet: function (d) {
                 if (d.award_status == "IDLE") {
@@ -530,7 +539,7 @@ layui.use('table',
             });
         });
 
-        (function longPolling() {
+        /*(function longPolling() {
             $.ajax({
                   url: "/sub?key=AWARD_RESULT",
                   data: {"timed": new Date().getTime()},
@@ -552,5 +561,5 @@ layui.use('table',
                       }
                   }
               });
-          })();
+          })();*/
     });

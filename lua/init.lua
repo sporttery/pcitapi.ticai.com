@@ -73,9 +73,16 @@ loadTerminalConfig = function(configPath)
         table.insert(terminal_no_arr, "PWD2_" .. k)
         table.insert(terminal_no_arr, v.pwd2)
         if v.autoStart and v.autoStart == "on" then
+            local status = redis:hget("TERMINAL_LIST" ,k)
+            local work_status 
+            if type(status) == "userdata" or status ~= "ONLINE" then
+                work_status = "STOP"
+            else
+                work_status = "START"
+            end
             table.insert(terminal_no_arr, "WORK_STATUS_" .. k)
-            table.insert(terminal_no_arr, "START")
-            __terminal_config[k]["WORK_STATUS"] = "START"
+            table.insert(terminal_no_arr, work_status)
+            __terminal_config[k]["WORK_STATUS"] = work_status
         end
     end
     redis:mset(unpack(terminal_no_arr))
@@ -101,7 +108,7 @@ saveAwardResult = function(award_result, terminal_no)
     else
         -- award_result_info="该票已在2020-06-09 11:52:50时间进行兑奖，兑奖者为4601070000，中奖金额：20元。(611324)"
         award_time = award_result_info:match("该票已在(.+)时间")
-        PRIZE_UNIT_ID = award_result_info:match("兑奖者为(%d+)，")
+        -- PRIZE_UNIT_ID = award_result_info:match("兑奖者为(%d+)，")
         award_money = award_money .. "00"
     end
     sql =
@@ -135,7 +142,9 @@ saveAwardResult = function(award_result, terminal_no)
     if count > 0 then
         data.msg = "成功"
         delRes = redis:del("AWARD_RESULT_" .. terminal_no)
+        setRes = redis:set("AWARD_STATUS_" .. terminal_no,"IDLE")
         data.delRes = delRes
+        data.setRes = setRes
     end
     return data;
 end
