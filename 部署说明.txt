@@ -1,6 +1,6 @@
 1、在控制机服务器上安装 openresty(nginx+lua) ,安装 redis(5.0)
-    1.1 redis 取消密码，默认端口，监听内网IP以实现内网访问
-
+    1.1 redis 取消密码，默认端口，设置开机启动
+    1.2 修改redis 监听内网IP以实现内网访问
 2、将 pcitapi.ticai.com.tar.gz 解压到/var/www 目录下，
     2.1 如果要换成其它目录，需要修改 www.pcitapi.ticai.com.conf 的配置,具体执行下面脚本：
         sed -i 's/\/var\/www\/pcitapi.ticai.com/你的目录/g' www.pcitapi.ticai.com.conf
@@ -11,23 +11,26 @@
         pwd1 是UKEY密码，8位数字
         pwd2 是用户账户和密码的拼接，9位数字
         autoStart 默认打开兑奖功能， on 是默认打开， 不设置或者其它值如off，就是不打开
+        IP 彩票机的IP
 
 3、增加本地解析 ，增加路由器域名重定向
-    3.1 在控制机服务器上执行：echo 127.0.0.1 pcitapi.ticai.com >> /etc/hosts
+    3.1 在控制机服务器上执行：echo "127.0.0.1 pcitapi.ticai.com" >> /etc/hosts
     3.2 修改路由器配置，将pcitapi.ticai.com重定向控制机服务器的IP
-        如果路由器不支持，需要修改每台彩票机hosts，将 pcitapi.ticai.com 指向 控制机服务器IP 
+        如果路由器不支持，需要修改每台彩票机hosts，将 pcitapi.ticai.com 指向 控制机服务器IP
+        比如 echo "192.168.1.88  pcitapi.ticai.com" >> /etc/hosts
 
 4、crontab.sh 是获取数据的脚本
     4.1 可以自己设定时间，模版是1秒钟执行一次，请修改，并定时清理执行日志
         getData 建议 3秒执行一次
-        getAwardResult 建议1.5秒执行一次
-    4.2 建议不要直接用shell执行，用守护进程执行 配置 crond
+    4.2 将脚本加入 /ect/rc.local 实现开机启动
 
-5、彩票机程序是 award_scan_2.1.so
-    5.1 复制此文件到 /目录下面,
+5、彩票机程序 
+    5.1 复制award_scan_2.1.so 到彩票机的/目录下面, /award_scan_2.1.so
     5.2 修改 /opt/install/scripts/apprun.sh ,增加破解注入，如下：
         sed -i 's/^        sudo LD_L/        sudo LD_PRELOAD=\/award_scan_2.1.so LD_L/' /opt/install/scripts/apprun.sh
-    5.3 重启彩票机，输入密码后自动返回主界面，表示破解正常
+    5.3 如果路由器不支持重定向，添加本地解析
+        echo "192.168.1.88  pcitapi.ticai.com" >> /etc/hosts
+    5.4 重启彩票机，输入密码后自动返回主界面，表示破解正常
 
 6、重启彩票机，设置密码的彩票机会自动登录并到主界面
 
