@@ -22,7 +22,6 @@ var os = function () {
 }();
 function getWorkStatus() {
     var url = "/api/getTerminal?"
-
     if (workList.length > 0) {
         url += "terminal_no=" + workList.join(",")
     }
@@ -30,15 +29,22 @@ function getWorkStatus() {
         return;
     }
     $.get(url, function (data) {
-
         if (workList.length > 0) {
             for (var i = 0; i < data.data.length; i++) {
                 var d = data.data[i];
                 var terminal_no = d.terminal_no;
                 var award_status = d.award_status;
+                var work_status = d.work_status;
                 var el = workListEl[terminal_no];
+                if (!el) {
+                    continue;
+                }
+                if (work_status != "START"){
+                    location.reload();
+                    break;
+                }
                 var oldAwardNo = el.data("value");
-                if (el && oldAwardNo != award_status) {
+                if (oldAwardNo != award_status) {
                     if (award_status == "IDLE") {
                         text = "空闲";
                         color = "green";
@@ -72,7 +78,7 @@ function getWorkStatus() {
                                 } else {
                                     jinggaoAudio[0].play();
                                 }
-                                layer.msg("警告：<h2 style='color:yellow'>"+terminal_no+"</h2>有票3秒都没有完成兑奖<h3 style='color:pink'>"+award_status+"</h3>");
+                                layer.msg("警告：<h2 style='color:yellow'>" + terminal_no + "</h2>有票3秒都没有完成兑奖<h3 style='color:pink'>" + award_status + "</h3>");
                             }
                         }, 3000, { award_status, terminal_no });
                         if (waitingTicketEl[award_status]) {
@@ -432,7 +438,7 @@ function initTermnal(data) {
             title: 'IP',
             sort: true,
             templet: function (d) {
-                return '<a href="/showscreen.html?ip='+d.IP+'" target="_blank">'+d.IP.split(".").slice(-2).join(".")+'</a>';
+                return '<a href="/showscreen.html?ip=' + d.IP + '" target="_blank">' + d.IP.split(".").slice(-2).join(".") + '</a>';
             }
         },
         {

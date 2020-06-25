@@ -25,6 +25,7 @@ for k, v in pairs(terminalList) do
     table.insert(terminal_no_arr, "WORK_STATUS_" .. k)
     table.insert(terminal_no_arr, "AWARD_STATUS_" .. k)
 end
+
 local status_arr = redis:mget(unpack(terminal_no_arr))
 rtn_data.status_arr = status_arr
 local idx = 1
@@ -39,6 +40,13 @@ for k, v in pairs(terminalList) do
         status_arr[idx] = "STOP" 
     end
     terminal.work_status = status_arr[idx]
+    if terminal.work_status == "START" then
+        local online = redis:hget("TERMINAL_LIST",k)
+        if type(online) == "userdata" or online ~= "ONLINE" then
+            terminal.work_status = "STOP"
+            redis:set("WORK_STATUS_" .. k,terminal.work_status)
+        end
+    end
     idx = idx + 1
     if type(status_arr[idx]) == "userdata" then 
         status_arr[idx] = "IDLE" 
