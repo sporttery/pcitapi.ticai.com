@@ -24,10 +24,9 @@
                 ip=defaultIp;
             }
             document.getElementById("title").innerText = "终端机IP : "+ip;
-            document.getElementById("divImg").innerHTML = '<img src="/abc.png?ip='+ip+'" alt="终端机【'+ip+'】的界面" id="img" onerror="setTimeout(loadImage,loadImageDelay)" onload="setTimeout(loadImage,loadImageDelay)"/>';
             img = document.getElementById("img");
         }else{
-            img.src = img.src.split("t=")[0]+"t="+(+new Date);
+            img.src = img.src.split("t=")[0]+"t="+(+new Date)+"&ip="+ip;
         }
      }
 
@@ -36,6 +35,7 @@
 <body>
 <h1 id="title"></h1>
 <div style="margin: auto;text-align: center;vertical-align: middle; width: 100%;height: 100%;" id="divImg">
+    <img src="/abc1.png?t=1" alt="终端机的界面" id="img" onerror="setTimeout(loadImage,loadImageDelay)" onload="setTimeout(loadImage,loadImageDelay)"/> 
 </div>
 </body>
 </html>
