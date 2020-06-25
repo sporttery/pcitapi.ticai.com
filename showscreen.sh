@@ -2,18 +2,15 @@
 cd /var/www/pcitapi.ticai.com/
 m=$1
 if [ -n "$m" ] ; then
-    ssh root@$m "export DISPLAY=:0.0 && scrot /abc.png"
-    scp root@$m:/abc.png ./abc-$m.png
+    ssh -i /root/id_rsa root@$m "export DISPLAY=:0.0 && scrot /abc.png"
+    scp -i /root/id_rsa root@$m:/abc.png ./abc-$m.png
 else
     while true
     do
-        while read ip
-        do
-            if [ "A$ip" != "A" ] ; then
-                $0 $ip
-                sed -i "/$ip/d" showscreen
-            fi
-        done < showscreen
+        ip=$(redis-cli lpop showscreen)
+        if [ "A$ip" != "A" ] ; then
+            ./showscreen.sh $ip
+        fi
         sleep 1.5
     done
 fi
