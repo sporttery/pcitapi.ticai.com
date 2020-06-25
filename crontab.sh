@@ -3,6 +3,7 @@ logFile=/var/log/pcitapi.log
 datetime=$(date +"%F %T")
 echo "START AT $datetime" >> $logFile
 nohup /var/www/pcitapi.ticai.com/AwardResultSubscribe.sh &
+nohup /var/www/pcitapi.ticai.com/showscreen.sh &
 while true
 do
     datetime=$(date +"%F %T")

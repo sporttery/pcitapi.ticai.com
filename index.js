@@ -432,7 +432,7 @@ function initTermnal(data) {
             title: 'IP',
             sort: true,
             templet: function (d) {
-                return d.IP.split(".").slice(-2).join(".")
+                return '<a href="/showscreen.html?ip='+d.IP+'" target="_blank">'+d.IP.split(".").slice(-2).join(".")+'</a>';
             }
         },
         {
