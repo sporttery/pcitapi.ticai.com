@@ -10,7 +10,6 @@ if terminal_no then
         __terminal_config = loadTerminalConfig(ngx.var.document_root .. "/config.json")
     end
     local status = redis:hget("TERMINAL_LIST" ,terminal_no)
-    local work_status 
     rtn_data.code = 0
     if type(status) == "userdata" or status ~= "ONLINE" then
         rtn_data.code = -2
