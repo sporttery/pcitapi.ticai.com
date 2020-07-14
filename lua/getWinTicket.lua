@@ -4,7 +4,8 @@ local field = ngx.var.arg_field
 local order = ngx.var.arg_order
 local limitStr = " limit " .. tostring((page - 1) * limit) .. "," ..
                      tostring(limit)
-local orderBy = " order by prize_flag asc,case when prize_timestamp = null then insert_timestamp else prize_timestamp end desc , ticket_idmsg asc "
+--local orderBy = " order by prize_flag asc,case when prize_timestamp = null then insert_timestamp else prize_timestamp end desc , ticket_idmsg asc "
+local orderBy = " order by update_time desc , ticket_idmsg asc "
 if field and order then
     orderBy = " order by " .. field .." " .. order
 end

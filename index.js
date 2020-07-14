@@ -359,6 +359,9 @@ function initWinTicket() {
                     text = "已中奖"
                 } else if (d.prize_Flag == 4) {
                     text = "未中奖"
+		    if (d.msg.indexOf("611324") != -1) {
+		   	text = "重兑奖";
+		    }
                 } else if (d.prize_Flag == 2) {
                     text = "中大奖"
                 } else if (d.prize_Flag == -1) {
