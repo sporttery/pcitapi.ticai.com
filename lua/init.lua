@@ -110,6 +110,12 @@ saveAwardResult = function(award_result, terminal_no)
         award_time = award_result_info:match("该票已在(.+)时间")
         -- PRIZE_UNIT_ID = award_result_info:match("兑奖者为(%d+)，")
         award_money = award_money .. "00"
+    	local now = os.time()
+    	local _, _, y, m, d, _hour, _min, _sec = string.find(award_time, "(%d+)\-(%d+)\-(%d+) (%d+):(%d+):(%d+)");
+    	local diff = now - os.time({year=y,month=m,day=d,hour=_hour,min=_min,sec=_sec})
+    	if diff > 10 then
+	    prize_flag = 4;
+    	end
     end
     sql =
         "update Tb_Win_Ticket_V2 set msg='" ..

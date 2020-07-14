@@ -130,6 +130,9 @@ function getAwardResult(ticket, terminal_no) {
                             text = "已中奖";
                         } else if (prize_flag == 4) {
                             text = "未中奖";
+			    if (award_result_info.indexOf("611324") != -1) {
+			    	text = "重兑奖";
+			    }
                         } else if (prize_flag == 2) {
                             text = "中大奖";
                         } else if (prize_flag == -1) {
