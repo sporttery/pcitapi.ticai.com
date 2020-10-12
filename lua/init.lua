@@ -108,7 +108,14 @@ saveAwardResult = function(award_result, terminal_no)
     else
         -- award_result_info="该票已在2020-06-09 11:52:50时间进行兑奖，兑奖者为4601070000，中奖金额：20元。(611324)"
         award_time = award_result_info:match("该票已在(.+)时间")
-        award_money = award_money .. "00"
+        terminal_award = award_result_info:match("兑奖者为(%d+)，")
+	if terminal_no:sub(1,10) ~= terminal_award:sub(1,10) then
+	    prize_flag = 4
+	    award_money = 0
+            PRIZE_UNIT_ID = terminal_award
+	    award_result_info = award_result_info .. "[terminal="..terminal_no.."]"
+	else
+	award_money = award_money .. "00"
     	local now = os.time()
     	--local _, _, y, m, d, _hour, _min, _sec = string.find(award_time,"(%d+)\-(%d+)\-(%d+) (%d+):(%d+):(%d+)")
     	local y = award_time:sub(1,4)
@@ -118,10 +125,13 @@ saveAwardResult = function(award_result, terminal_no)
 	local _min = award_time:sub(15,16)
 	local _sec = award_time:sub(18,19)
     	local diff = now - os.time({year=y,month=m,day=d,hour=_hour,min=_min,sec=_sec})
-    	if diff > 10 then
+    	if diff > 5 then
 	    prize_flag = 4
-            PRIZE_UNIT_ID = award_result_info:match("兑奖者为(%d+)，")
+	    award_money = 0
+            PRIZE_UNIT_ID = terminal_award
+	    award_result_info = award_result_info .. "[time>"..tostring(diff).."]"
     	end
+	end
     end
     sql =
         "update Tb_Win_Ticket_V2 set msg='" ..
